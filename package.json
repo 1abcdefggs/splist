@@ -1,13 +1,26 @@
 {
   "name": "splist",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "2.0.0",
+  "description": "An ultra-fast Markdown split tool — split by structure (list) or by marker (sp)",
+  "main": "src/cli/cli.js",
+  "bin": {
+    "splist": "./src/cli/cli.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "demo": "node demo_cases/demo_cases_gen.js && node demo_cases/demo_cases_raw/demo_cases_run.js",
+    "test": "node demo_cases/demo_cases_raw/demo_cases_run.js",
+    "build:manual": "node src/cli/cli.js USAGE.md -f",
+    "build:web": "npm --prefix react run build"
+  },
+  "keywords": [
+    "markdown",
+    "split",
+    "cli",
+    "tool",
+    "document",
+    "oss"
+  ],
+  "author": "1abcdefggs",
+  "license": "MIT",
   "type": "commonjs"
 }
