@@ -9,7 +9,7 @@
 // As a general rule, this core file should strictly remain unmodified.
 // ============================================================
 'use strict';
-const fs = require('fs'), path = require('path'), { exec } = require('child_process');
+const fs = require('fs'), path = require('path');
 
 // ──── [Phase 4-A] Terminal Hyperlink ────START
 /** Generates an ANSI OSC 8 clickable terminal link for a file path. @param {string} text @param {string} absPath @returns {string} */
@@ -20,14 +20,12 @@ const makeClickable = (text, absPath) => {
 // ──── [Phase 4-A] Terminal Hyperlink ────END
 
 // ──── [Phase 4-B] Finish Process ────START
-/** Handles process termination, TOC generation, auto-open, and completion output. @param {string} outDir @param {string|null} [tocContent] @param {boolean} [generateToc] @param {string} [ext] */
+/** Handles process termination, TOC generation, and completion output. @param {string} outDir @param {string|null} [tocContent] @param {boolean} [generateToc] @param {string} [ext] */
 const finishProcess = (outDir, tocContent = null, generateToc = false, ext = '.md') => {
     if (generateToc && tocContent) {
         const name = `00_TOC${ext}`, filePath = path.join(outDir, name);
         fs.writeFileSync(filePath, tocContent);
         console.log(`✅ Created: ${makeClickable(name, filePath)}`);
-        const cmd = process.platform === 'win32' ? 'start ""' : process.platform === 'darwin' ? 'open' : 'xdg-open';
-        exec(`${cmd} "${filePath}"`, () => { });
     }
     console.log(`\n🎉 Splisted!\n📁 Saved to: ${makeClickable(outDir, outDir)}`);
 };
