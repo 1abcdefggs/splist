@@ -29,7 +29,7 @@ const resolveOutputDir = (b, m = 'v') => {
 // ──── [Phase 2-B] Provision ────START
 /** Determines and creates the output directory. @param {string} f @param {string} p @param {string} m @param {string|null} [c] @returns {string|null} */
 const prepareOutputDir = (f, p, m, c = null) => {
-    const dir = c || process.env.SPLIST_OUT_DIR || path.dirname(f);
+    const dir = c || path.dirname(f);
     const outDir = resolveOutputDir(path.join(dir, `${p}${path.basename(f, path.extname(f))}`), m);
     if (!outDir) return null;
     if (m === 'f' && fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true, force: true });
