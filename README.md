@@ -1,14 +1,33 @@
-# SPLIST (sp & list)
-![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+# SPLIST (split & list)
+![npm version](https://img.shields.io/npm/v/@splists/splist.svg?color=blue)
 ![Node.js](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)
+![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![Browser](https://img.shields.io/badge/Browser-Try%20Now!-ff69b4.svg)](https://splists.github.io/)
+
+✨ **Try SPLIST instantly in your browser:** [https://splists.github.io/](https://splists.github.io/)
+
+<p align="center">
+<img src="demo_cases/demo_cases_img/demo00.png" width="400">
+</p>
+
+> 🌐 **Try it now in your browser!**
+> SPLIST is available as a full local Web UI at **[splists.github.io](https://splists.github.io/)**! No installation required—just drag and drop your markdown files to process them securely in your browser.
 
 ## Overview
-A CLI tool that instantly and automatically splits and organizes massive Markdown files or text documents into beautiful folder hierarchies.
+Splitting large Markdown or text files into a table of contents.
+
+<p align="left">
+  <img src="assets/splist_demo-001.png" alt="Long Document Example" height="280" style="margin-right: 15px;">
+  <img src="assets/splist-gif.gif" alt="Splist Demo" height="280">
+</p>
 
 It takes documents that have fallen into "scrolling hell" and safely, instantaneously carves them into separate files based on headings (`#`) or dividing emojis (`✂️`).
 
 ### Before: A single massive file (Raw)
+
+Before: A single massive file (Raw). Divided into ## units using a typical Markdown structure.
+
 ```markdown
   # My Project
   ## SECTION001
@@ -19,16 +38,22 @@ It takes documents that have fallen into "scrolling hell" and safely, instantane
 
 ### After: Auto-organized folders (Splisted!)
 
+- The original file name with a `✂️` prefix becomes the output directory name (e.g., `✂️My_Project`).
+- The heading in the original text becomes the file name.
+- A sequential number is added to the prefix of the file name.
+
 ```text
-My_Project/
-├── 001_SECTION001.md
+✂️My_Project/
+├── 01_SECTION001.md
 ├── ...
-├── 099_SECTION099.md
-└── 100_SECTION100.md
+├── 09_SECTION099.md
+└── 10_SECTION100.md
 ```
 
 ### 🤖 LLM Prompt (Copy & Paste)
 Want an AI assistant to help you split a file or organize your workspace using SPLIST? Just copy and paste the prompt below to your LLM:
+
+<img src="assets/splist-demo-ai.png" alt="AI Agent Demo" width="70%">
 
 <details>
 <summary>Click to copy the LLM Prompt</summary>
@@ -191,7 +216,11 @@ Parses Markdown heading hierarchy and splits it logically.
   * `-m, --mode <type>`: Split mode (`or`: add sequential numbers (default), `un`: no sequential numbers)
   * `-h, --header <level>`: Heading level to base the split on (e.g., `"###"`)
   * `-k, --keep`: Keeps the header hierarchy of the output files as-is without auto-promoting them
-  * `--conflict <option>`: Collision avoidance rules (see Common Options)
+  * `-ext, --extension <ext>`: Force the output file extension (e.g., `txt` or `.txt`)
+  * `-o, --out, --output <dir>`: Custom output folder path
+  * `-toc`: Auto-generate Table of Contents (`00_TOC.md`)
+  * `-fmex, -fm00, -fm01`: Frontmatter handling (`fmex`: exclude, `fm00`: separate file, `fm01`: keep in 1st chunk)
+  * `--conflict <option>`: Collision avoidance rules (`v`: versioning, `d`: date, `t`: time, `s`: skip, `f`: force)
 
 
 ### `splist <file> sp` Command
@@ -203,7 +232,10 @@ Physically cuts using dividing markers (specified strings).
 * **`<file>`**: Target text/Markdown file to split (Required)
 * **Options**:
   * `-m, --marker <string>`: Custom marker (e.g., `"==="`). When unspecified, `✂️`, `CUT`, and `cut` are applied.
-  * `--conflict <option>`: Collision avoidance rules (see Common Options)
+  * `-ext, --extension <ext>`: Force the output file extension (e.g., `md` or `.md`)
+  * `-o, --out, --output <dir>`: Custom output folder path
+  * `-toc`: Auto-generate Table of Contents (`00_TOC.md`)
+  * `--conflict <option>`: Collision avoidance rules (`v`: versioning, `d`: date, `t`: time, `s`: skip, `f`: force)
 
 
 ---

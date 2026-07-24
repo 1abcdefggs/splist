@@ -1,5 +1,7 @@
 # ✂️ SPLIST (Overview & Installation)
 
+✨ **Try SPLIST instantly in your browser:** [https://splists.github.io/](https://splists.github.io/)
+
 ## Welcome to SPLIST
 
 An ultra-fast, zero-dependency CLI toolset to split a single Markdown or text file into multiple beautifully organized files and automatically generate a dynamic Table of Contents (TOC).
@@ -10,10 +12,14 @@ Optimized for rapid documentation, editing, and seamless integration with **VS C
 
 Get the `splist` command globally on your machine in just a few seconds.
 
-1. Clone or download your repository:
-   `cd splist`
-2. Link the package globally using npm:
-   `npm link`
+**Official npm Installation (Recommended):**
+```bash
+npm install -g @splists/splist
+```
+
+**Local Development Installation:**
+1. Clone or download your repository: `cd splist`
+2. Link the package globally using npm: `npm link`
 
 Now, you can run the `splist` command directly from **any folder** on your computer!
 
@@ -33,15 +39,17 @@ In other words, simply typing `splist memo.md` will initiate the perfect split!
 
 ---
 
-## 🎯 The Ultimate Tutorial: Split This README!
+## 🎯 The Ultimate Tutorial: Split This Manual!
 
-Want to see the magic right now? **Run the `splist` command with the `toc` option on this very `README.md` file!**
+Want to see the magic right now? **Run the `splist` command on this very `USAGE.md` (or `README.md`) file!**
 
 ```bash
-splist README.md toc
+splist USAGE.md
+# or
+splist README.md
 ```
 
-When you do this, SPLIST will automatically extract the complete Official Manual (written below) into beautiful folders and files, and generate a Table of Contents. Try it now!
+When you do this, SPLIST will automatically extract the complete text into beautiful folders and files. Try it now!
 
 ---
 

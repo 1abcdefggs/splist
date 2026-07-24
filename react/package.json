@@ -1,7 +1,7 @@
 {
   "name": "react",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.1.0",
   "type": "module",
   "homepage": "https://<USERNAME>.github.io/<REPO>/",
   "scripts": {
@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",

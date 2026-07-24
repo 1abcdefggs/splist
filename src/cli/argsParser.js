@@ -6,7 +6,7 @@
 const path = require('path');
 
 // Regular expression for recognized options
-const OPTIONS_REGEX = /^(-*)(or|un|d|date|t|time|s|skip|f|force|toc|fmex|fm00|fm01|o|out|output)$/i;
+const OPTIONS_REGEX = /^(-*)(or|un|u|d|date|t|time|s|skip|f|force|toc|fmex|fm00|fm01|o|out|output|k|keep|ext|extension|m|mode|h|header|marker|conflict)$/i;
 
 /**
  * Generates a config object from the command arguments entered in the terminal
@@ -27,7 +27,10 @@ const parseOptions = (args = [], targetFile = '') => {
         customMarker: null,    // User-specified custom marker
         frontmatterMode: 'extract00', // How to handle frontmatter
         outDir: null,          // Output destination folder
-        mode: defaultMode      // Smart default based on extension
+        mode: defaultMode,     // Smart default based on extension
+        keep: false,           // Disable heading auto-promotion
+        un: false,             // Remove sequential numbers from filenames
+        ext: null              // Extension override
     };
 
     for (let i = 0; i < args.length; i++) {
@@ -88,6 +91,62 @@ const parseOptions = (args = [], targetFile = '') => {
                     break;
                 case 'fm01':
                     config.frontmatterMode = 'extract01';
+                    break;
+                case 'k':
+                case 'keep':
+                    config.keep = true;
+                    break;
+                case 'u':
+                case 'un':
+                    config.un = true;
+                    break;
+                case 'h':
+                case 'header':
+                case 'marker':
+                    let markerVal = valueFromDelimiter;
+                    if (markerVal === null && i + 1 < args.length && !args[i + 1].match(OPTIONS_REGEX)) {
+                        markerVal = args[i + 1];
+                        i++;
+                    }
+                    if (markerVal) config.customMarker = markerVal;
+                    break;
+                case 'm':
+                case 'mode':
+                    let modeVal = valueFromDelimiter;
+                    if (modeVal === null && i + 1 < args.length && !args[i + 1].match(OPTIONS_REGEX)) {
+                        modeVal = args[i + 1];
+                        i++;
+                    }
+                    if (modeVal) {
+                        const lower = modeVal.toLowerCase();
+                        if (lower === 'un') config.un = true;
+                        else if (lower === 'or') config.un = false;
+                        else config.customMarker = modeVal;
+                    }
+                    break;
+                case 'conflict':
+                    let conflictVal = valueFromDelimiter;
+                    if (conflictVal === null && i + 1 < args.length && !args[i + 1].match(OPTIONS_REGEX)) {
+                        conflictVal = args[i + 1];
+                        i++;
+                    }
+                    if (conflictVal) {
+                        const firstChar = conflictVal.toLowerCase()[0];
+                        if (['v', 'd', 't', 's', 'f'].includes(firstChar)) {
+                            config.conflictMode = firstChar;
+                        }
+                    }
+                    break;
+                case 'ext':
+                case 'extension':
+                    let extValue = valueFromDelimiter;
+                    if (extValue === null && i + 1 < args.length && !args[i + 1].match(OPTIONS_REGEX)) {
+                        extValue = args[i + 1];
+                        i++; // Skip next argument
+                    }
+                    if (extValue) {
+                        config.ext = extValue.startsWith('.') ? extValue : `.${extValue}`;
+                    }
                     break;
             }
         } else {
