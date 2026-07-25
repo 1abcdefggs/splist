@@ -8,20 +8,27 @@ An ultra-fast, zero-dependency CLI toolset to split a single Markdown or text fi
 
 Optimized for rapid documentation, editing, and seamless integration with **VS Code**.
 
-## 🛠️ Installation
+## 🛠️ Execution & Installation
 
-Get the `splist` command globally on your machine in just a few seconds.
+Get started with SPLIST in seconds.
 
-**Official npm Installation (Recommended):**
+**Execute via npx (Recommended):**
+Run the latest version instantly without a global installation:
+```bash
+npx @splists/splist target.md
+```
+*(Note: Throughout this manual, examples use the bare `splist` command for brevity. If using npx, simply replace it with `npx @splists/splist`.)*
+
+**Global Installation (Alternative):**
+If you prefer a shorter command:
 ```bash
 npm install -g @splists/splist
 ```
+Now, you can run the `splist` command directly from **any folder** on your computer!
 
 **Local Development Installation:**
 1. Clone or download your repository: `cd splist`
 2. Link the package globally using npm: `npm link`
-
-Now, you can run the `splist` command directly from **any folder** on your computer!
 
 ## 🔄 Migration Guide (v1 to v2)
 
