@@ -37,9 +37,7 @@ exports.transformChunk = null;
 // A post-processing hook called after finishProcess.
 // If left as `null`, it performs the default behavior (does nothing).
 //
-// Example: Automatically run git add on the output folder
 // exports.afterFinish = (outDir, config) => {
-//     const { execSync } = require('child_process');
-//     execSync(`git add "${outDir}"`, { stdio: 'inherit' });
+//     console.log(`Custom post-processing for: ${outDir}`);
 // };
 exports.afterFinish = null;

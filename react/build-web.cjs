@@ -40,7 +40,6 @@ let bundleContent = `
   // Mock NodeJS process object
   window.process = {
     cwd: () => '/',
-    env: {}, // Add empty env object
     exit: (code) => { throw new Error('Process exited with code ' + code); }
   };
 
@@ -77,17 +76,13 @@ let bundleContent = `
     }
   };
 
-  // Basic child_process mock
-  const childProcessMock = {
-    exec: () => {}
-  };
+
 
   // Simple CommonJS loader
   const modules = {};
   function require(id, currentDir) {
     if (id === 'fs') return fsMock;
     if (id === 'path') return pathMock;
-    if (id === 'child_process') return childProcessMock;
     
     // Resolve relative paths
     let resolvedId = id;

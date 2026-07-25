@@ -92,7 +92,6 @@ To keep Phase 4 maintainable and modular, its responsibilities are divided into 
 // =====================================================================
 const fs = require('fs');
 const path = require('path');
-const { exec } = require('child_process');
 
 // [Phase 4-A] Transform & Format
 const transformChunks = (chunks, frontMatter, options = {}) => {
@@ -128,9 +127,6 @@ const finalizeProcess = (outDir, emittedFiles, options = {}, ext = '.md') => {
         const tocName = `00_TOC${ext}`;
         const tocPath = path.join(outDir, tocName);
         fs.writeFileSync(tocPath, tocLines.join('\n') + '\n');
-
-        const cmd = process.platform === 'win32' ? 'start ""' : process.platform === 'darwin' ? 'open' : 'xdg-open';
-        exec(`${cmd} "${tocPath}"`, () => {});
     }
 
     console.log(`\n🎉 Splisted!\n📁 Saved to: ${outDir}`);

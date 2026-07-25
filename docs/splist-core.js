@@ -11,7 +11,6 @@
   // Mock NodeJS process object
   window.process = {
     cwd: () => '/',
-    env: {}, // Add empty env object
     exit: (code) => { throw new Error('Process exited with code ' + code); }
   };
 
@@ -48,17 +47,13 @@
     }
   };
 
-  // Basic child_process mock
-  const childProcessMock = {
-    exec: () => {}
-  };
+
 
   // Simple CommonJS loader
   const modules = {};
   function require(id, currentDir) {
     if (id === 'fs') return fsMock;
     if (id === 'path') return pathMock;
-    if (id === 'child_process') return childProcessMock;
     
     // Resolve relative paths
     let resolvedId = id;
@@ -215,7 +210,7 @@ const resolveOutputDir = (b, m = 'v') => {
 // ──── [Phase 2-B] Provision ────START
 /** Determines and creates the output directory. @param {string} f @param {string} p @param {string} m @param {string|null} [c] @returns {string|null} */
 const prepareOutputDir = (f, p, m, c = null) => {
-    const dir = c || process.env.SPLIST_OUT_DIR || path.dirname(f);
+    const dir = c || path.dirname(f);
     const outDir = resolveOutputDir(path.join(dir, `${p}${path.basename(f, path.extname(f))}`), m);
     if (!outDir) return null;
     if (m === 'f' && fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true, force: true });
@@ -247,13 +242,16 @@ module.exports = { resolveOutputDir, prepareOutputDir };
 'use strict';
 const INVALID_CHAR = /[\\/:*?"<>|]/g, H_CLEAN = /^#+\s+/;
 
+/** Escapes regex metacharacters so user-provided marker is treated as a literal string. @param {string} value @returns {string} */
+const escapeRegExp = (value = '') => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 // ──── [Phase 3-A] Rule Generation ────START
 /** Creates a rule object for splistEngine. @param {string|null} [customMarker] @param {Object} [config] @returns {{ test: Function, isExactMatch: Function, extractTitle: Function }} */
 const createMarkerRule = (customMarker = null, config = {}) => {
     if ((config.mode || 'sp') === 'list' && !customMarker) {
         return { test: line => /^##\s+/.test(line), isExactMatch: () => false, extractTitle: line => line };
     }
-    const p = customMarker || '✄|✂️|cut|v';
+    const p = customMarker ? escapeRegExp(customMarker) : '✄|✂️|cut|v';
     const testRegex = new RegExp(`^(?:${p})(?:\\s+|$)`, 'i');
     const exactRegex = new RegExp(`^(?:${p})\\s*$`, 'i');
     const replaceRegex = new RegExp(`^\\s*(?:${p})\\s*`, 'i');
@@ -304,7 +302,7 @@ module.exports = { createMarkerRule, getSafeTitle };
 // As a general rule, this core file should strictly remain unmodified.
 // ============================================================
 'use strict';
-const fs = require('fs'), path = require('path'), { exec } = require('child_process');
+const fs = require('fs'), path = require('path');
 
 // ──── [Phase 4-A] Terminal Hyperlink ────START
 /** Generates an ANSI OSC 8 clickable terminal link for a file path. @param {string} text @param {string} absPath @returns {string} */
@@ -315,14 +313,12 @@ const makeClickable = (text, absPath) => {
 // ──── [Phase 4-A] Terminal Hyperlink ────END
 
 // ──── [Phase 4-B] Finish Process ────START
-/** Handles process termination, TOC generation, auto-open, and completion output. @param {string} outDir @param {string|null} [tocContent] @param {boolean} [generateToc] @param {string} [ext] */
+/** Handles process termination, TOC generation, and completion output. @param {string} outDir @param {string|null} [tocContent] @param {boolean} [generateToc] @param {string} [ext] */
 const finishProcess = (outDir, tocContent = null, generateToc = false, ext = '.md') => {
     if (generateToc && tocContent) {
         const name = `00_TOC${ext}`, filePath = path.join(outDir, name);
         fs.writeFileSync(filePath, tocContent);
         console.log(`✅ Created: ${makeClickable(name, filePath)}`);
-        const cmd = process.platform === 'win32' ? 'start ""' : process.platform === 'darwin' ? 'open' : 'xdg-open';
-        exec(`${cmd} "${filePath}"`, () => { });
     }
     console.log(`\n🎉 Splisted!\n📁 Saved to: ${makeClickable(outDir, outDir)}`);
 };
@@ -508,10 +504,8 @@ exports.transformChunk = null;
 // A post-processing hook called after finishProcess.
 // If left as `null`, it performs the default behavior (does nothing).
 //
-// Example: Automatically run git add on the output folder
 // exports.afterFinish = (outDir, config) => {
-//     const { execSync } = require('child_process');
-//     execSync(`git add "${outDir}"`, { stdio: 'inherit' });
+//     console.log(`Custom post-processing for: ${outDir}`);
 // };
 exports.afterFinish = null;
 

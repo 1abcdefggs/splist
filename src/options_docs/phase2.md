@@ -95,7 +95,7 @@ const { resolveOutputDir } = require('./utils');
 
 // [Phase 2-A] Resolve
 const resolveTargetEnv = (targetFile, prefix, conflictMode, customOutDir) => {
-    const dir = customOutDir || process.env.SPLIST_OUT_DIR || path.dirname(targetFile);
+    const dir = customOutDir || path.dirname(targetFile);
     const baseName = path.basename(targetFile, path.extname(targetFile));
     const basePath = path.join(dir, `${prefix}${baseName}`);
 

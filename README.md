@@ -6,7 +6,9 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 [![Browser](https://img.shields.io/badge/Browser-Try%20Now!-ff69b4.svg)](https://splists.github.io/)
 
-✨ **Try SPLIST instantly in your browser:** [https://splists.github.io/](https://splists.github.io/)
+✨ **Try SPLIST instantly in your browser:** [https://splists.github.io](https://splists.github.io/)
+
+`npm install @splists/splist` ([npm registry](https://www.npmjs.com/package/@splists/splist))
 
 
 > 🌐 **Try it now in your browser!**
