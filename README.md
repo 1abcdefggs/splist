@@ -8,6 +8,7 @@
 
 ✨ **Try SPLIST instantly in your browser:** [https://splists.github.io/](https://splists.github.io/)
 
+`npm install -g @splists/splist` ([npm registry](https://www.npmjs.com/package/@splists/splist))
 
 > 🌐 **Try it now in your browser!**
 > SPLIST is available as a full local Web UI at **[splists.github.io](https://splists.github.io/)**! No installation required—just drag and drop your markdown files to process them securely in your browser.
@@ -70,22 +71,12 @@ Please read the target file, decide the best splitting strategy (list or sp), an
 
 ---
 
-## Execution & Installation
+## Installation
 
-The `splist` command works across all OS environments: Windows, Mac, and Linux.
+The `splist` command becomes globally executable from any directory on your PC. It works across all OS environments: Windows, Mac, and Linux.
 
-### Method 1: Execute via npx (Recommended)
-You can run SPLIST instantly without installing it globally. This is the modern, secure way to ensure you always use the latest version without polluting your global environment:
-```bash
-npx @splists/splist README.md
-```
-
-> **💡 Note for Examples:**
-> Throughout this manual, we use the bare `splist` command for brevity (e.g., `splist target.md list`). 
-> If you are using npx, simply replace `splist` with `npx @splists/splist` in all examples.
-
-### Method 2: Global Installation (Alternative)
-If you prefer to have the `splist` command available globally in your terminal:
+### Method 1: Install via npm (Recommended)
+Installing globally is recommended for IDE users (like VS Code) who want to run the short `splist` command frequently in their terminal:
 ```bash
 npm install -g @splists/splist
 ```
@@ -99,6 +90,12 @@ You should see an output confirming the version like this:
 🚀 SPLIST v2.1.1
 
 💡 Note: When splitting a file, '-v' is used as a flag for the default folder conflict resolution (e.g., appending _v02).
+```
+
+### Method 2: Execute via npx (Alternative)
+If you prefer not to install globally, you can run the latest version instantly using `npx`:
+```bash
+npx @splists/splist README.md
 ```
 
 ### Method 3: Install directly from GitHub
