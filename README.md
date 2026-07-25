@@ -5,6 +5,8 @@
 ![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 [![Browser](https://img.shields.io/badge/Browser-Try%20Now!-ff69b4.svg)](https://splists.github.io/)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-splists%2Fsplist-black?logo=github)](https://github.com/splists/splist)
+[![Publish status](https://github.com/splists/splist/actions/workflows/publish.yml/badge.svg)](https://github.com/splists/splist/actions)
 
 ✨ **Try SPLIST instantly in your browser:** [https://splists.github.io/](https://splists.github.io/)
 
