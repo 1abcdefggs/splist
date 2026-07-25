@@ -8,26 +8,85 @@ An ultra-fast, zero-dependency CLI toolset to split a single Markdown or text fi
 
 Optimized for rapid documentation, editing, and seamless integration with **VS Code**.
 
-## 🛠️ Installation
+## 🛠️ Installation & Execution Guide
 
-Get the `splist` command globally on your machine in just a few seconds.
+There are two main approaches: **A. Execute Directly (without installing)** and **B. Install (npm install / npm link)**.
 
-**Official npm Installation (Recommended):**
-Installing globally is recommended for frequent use in your terminal:
+### 💡 Prerequisite: Difference between npm and npx
+Before choosing a command, it is helpful to understand the difference between these two roles.
+
+- **`npm` (Node Package Manager)**
+  - **M** stands for **Manager**.
+  - **Role**: A dedicated tool for **"saving and placing"** packages on your PC (or folder).
+  - *Note: To execute them, you must call them manually in the terminal or use another mechanism.*
+- **`npx` (Node Package Execute)**
+  - **X** stands for **Execute** (derived from "executable").
+  - **Role**: A dedicated tool for **"executing"** packages.
+  - *Note: Even if not installed on your PC, it temporarily downloads the tool from the internet, "executes it immediately", and leaves no garbage behind. It can also find and "execute" locally saved tools.*
+
+Choose the best command for your environment and purpose from the options below.
+
+---
+
+## A. Execute Directly (Without installing)
+
+### Try it once immediately without polluting your environment
+(For those who want to try it or always use the latest version)
+
+**【No Installation Required】**
+```bash
+npx @splists/splist <file>
+```
+- Always runs the latest version and never pollutes your PC environment.
+- The command is slightly longer each time (`npx ~`).
+
+---
+
+## B. Install (Install and use)
+
+### Use it smoothly every day
+(For IDE users and personal use)
+
+**【Available System-wide (OS)】**
 ```bash
 npm install -g @splists/splist
 ```
-Now, you can run the `splist` command directly from **any folder** on your computer!
+- Installs to a common area across your entire PC.
+- The short `splist` command can be used from anywhere, whether you open a VS Code terminal, Windows Command Prompt (cmd) on your Desktop, or Mac Terminal.
 
-**Execute via npx (Alternative):**
-Run the latest version instantly without a global installation:
+### Integrate into your own project
+(For team development and automation)
+
+**【Limited to Current Folder】**
 ```bash
-npx @splists/splist target.md
+npm install @splists/splist
 ```
+- This is the basic command displayed on the official npm website.
+- `npm i @splists/splist` (`i` is short for `install`. It means `npm install @splists/splist`.)
+- Installs only inside the folder you currently have open in VS Code, etc. (`node_modules`).
+- In other cases, if you just type `splist` in the terminal, it cannot find it and **results in a "command not found" error**.
+- **Execution Method 1**: Prefix it with npx: `npx splist` (npx will automatically search inside the folder).
+- **Execution Method 2**: Register it in your `package.json` scripts and call it with `npm run`.
 
-**Local Development Installation:**
-1. Clone or download your repository: `cd splist`
-2. Link the package globally using npm: `npm link`
+### Try unreleased latest features as fast as possible
+(For Early Adopters)
+
+```bash
+npm install -g github:splists/splist
+```
+- By replacing the `@splists/splist` part of the above command with `github:splists/splist`, you can directly install the latest code on GitHub before it is released on npm.
+
+### Develop and extend the source code
+(For Contributors)
+
+```bash
+npm link
+```
+*(Execute inside the source code folder)*
+- You must download (clone or fork) the repository from GitHub in advance.
+  `git clone https://github.com/1abcdefggs/splist.git`
+  `cd splist`
+- When you run `npm link` inside the above folder, any code changes will immediately reflect in your local `splist` command without reinstalling (for developers only).
 
 ## 🔄 Migration Guide (v1 to v2)
 

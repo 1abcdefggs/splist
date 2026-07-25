@@ -71,48 +71,85 @@ Please read the target file, decide the best splitting strategy (list or sp), an
 
 ---
 
-## Installation
+## 🛠️ Installation & Execution Guide
 
-The `splist` command becomes globally executable from any directory on your PC. It works across all OS environments: Windows, Mac, and Linux.
+There are two main approaches: **A. Execute Directly (without installing)** and **B. Install (npm install / npm link)**.
 
-### Method 1: Install via npm (Recommended)
-Installing globally is recommended for IDE users (like VS Code) who want to run the short `splist` command frequently in their terminal:
+### 💡 Prerequisite: Difference between npm and npx
+Before choosing a command, it is helpful to understand the difference between these two roles.
+
+- **`npm` (Node Package Manager)**
+  - **M** stands for **Manager**.
+  - **Role**: A dedicated tool for **"saving and placing"** packages on your PC (or folder).
+  - *Note: To execute them, you must call them manually in the terminal or use another mechanism.*
+- **`npx` (Node Package Execute)**
+  - **X** stands for **Execute** (derived from "executable").
+  - **Role**: A dedicated tool for **"executing"** packages.
+  - *Note: Even if not installed on your PC, it temporarily downloads the tool from the internet, "executes it immediately", and leaves no garbage behind. It can also find and "execute" locally saved tools.*
+
+Choose the best command for your environment and purpose from the options below.
+
+---
+
+## A. Execute Directly (Without installing)
+
+### Try it once immediately without polluting your environment
+(For those who want to try it or always use the latest version)
+
+**【No Installation Required】**
+```bash
+npx @splists/splist <file>
+```
+- Always runs the latest version and never pollutes your PC environment.
+- The command is slightly longer each time (`npx ~`).
+
+---
+
+## B. Install (Install and use)
+
+### Use it smoothly every day
+(For IDE users and personal use)
+
+**【Available System-wide (OS)】**
 ```bash
 npm install -g @splists/splist
 ```
+- Installs to a common area across your entire PC.
+- The short `splist` command can be used from anywhere, whether you open a VS Code terminal, Windows Command Prompt (cmd) on your Desktop, or Mac Terminal.
 
-After installation, verify that it was installed successfully by checking the version:
+### Integrate into your own project
+(For team development and automation)
+
+**【Limited to Current Folder】**
 ```bash
-splist -v
+npm install @splists/splist
 ```
-You should see an output confirming the version like this:
-```text
-🚀 SPLIST v2.1.1
+- This is the basic command displayed on the official npm website.
+- `npm i @splists/splist` (`i` is short for `install`. It means `npm install @splists/splist`.)
+- Installs only inside the folder you currently have open in VS Code, etc. (`node_modules`).
+- In other cases, if you just type `splist` in the terminal, it cannot find it and **results in a "command not found" error**.
+- **Execution Method 1**: Prefix it with npx: `npx splist` (npx will automatically search inside the folder).
+- **Execution Method 2**: Register it in your `package.json` scripts and call it with `npm run`.
 
-💡 Note: When splitting a file, '-v' is used as a flag for the default folder conflict resolution (e.g., appending _v02).
-```
+### Try unreleased latest features as fast as possible
+(For Early Adopters)
 
-### Method 2: Execute via npx (Alternative)
-If you prefer not to install globally, you can run the latest version instantly using `npx`:
-```bash
-npx @splists/splist README.md
-```
-
-### Method 3: Install directly from GitHub
-If you want to install directly from the GitHub repository (e.g., to get the absolute latest version or if it's not on the npm registry):
 ```bash
 npm install -g github:splists/splist
 ```
+- By replacing the `@splists/splist` part of the above command with `github:splists/splist`, you can directly install the latest code on GitHub before it is released on npm.
 
-### Method 4: Local Installation (For Developers)
-1. Open your terminal and navigate to the root folder of the repository:
-```bash
-cd path/to/splist
-```
-2. Link (register) the package globally using npm:
+### Develop and extend the source code
+(For Contributors)
+
 ```bash
 npm link
 ```
+*(Execute inside the source code folder)*
+- You must download (clone or fork) the repository from GitHub in advance.
+  `git clone https://github.com/1abcdefggs/splist.git`
+  `cd splist`
+- When you run `npm link` inside the above folder, any code changes will immediately reflect in your local `splist` command without reinstalling (for developers only).
 
 Setup is now complete!
 
