@@ -1,7 +1,6 @@
 DEVELOPS/
 node_modules/
 .DS_Store
-.github/
 
 # demo_cases generated files
 demo_cases/demo_cases_raw/
