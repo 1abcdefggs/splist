@@ -591,10 +591,16 @@ const phase4 = require('./phase4.js');
  *   Falls back to Node built-ins when not provided (for backward compatibility).
  */
 const runSplist = async (targetFile, config = {}, customOptions = {}, ctx = {}) => {
-    // Resolve injected OS-level dependencies (provided by CLI or browser/test environment).
-    // Core phases themselves never call require('fs') or require('path') directly.
-    const fs = ctx.fs;
-    const path = ctx.path;
+    // Guard Clause: Validate required Dependency Injection context
+    if (!ctx || !ctx.fs || !ctx.path) {
+        throw new TypeError(
+            '[splist] Dependency Context Missing: { fs, path } must be provided in the 4th argument (ctx).\n' +
+            'Example: runSplist(targetFile, config, customOptions, { fs: require("fs"), path: require("path") })\n' +
+            'CLI passes Node builtins, while Web/Test environments pass virtual mocks.'
+        );
+    }
+
+    const { fs, path } = ctx;
 
     // ──── [Phase 1] Input & Protection ────
     let rawLines = phase1.readLinesSafe(targetFile, fs);
