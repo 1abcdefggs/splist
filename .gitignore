@@ -1,4 +1,5 @@
-DEVELOPS/
+DEVELOPS/*
+!DEVELOPS/options_docs/
 node_modules/
 .DS_Store
 
