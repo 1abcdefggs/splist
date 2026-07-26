@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --bg-dark: #0f172a;
   --bg-panel: rgba(30, 41, 59, 0.7);
   --text-main: #f8fafc;
@@ -1337,4 +1337,41 @@ textarea::placeholder {
     font-size: 1.4rem;
     padding: 0.4rem 0.8rem;
   }
+}
+.markdown-preview-container {
+  padding: 20px;
+  color: var(--text-main);
+  line-height: 1.6;
+}
+.markdown-preview-container h1, .markdown-preview-container h2, .markdown-preview-container h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 0.3em;
+}
+.markdown-preview-container pre {
+  background: rgba(0,0,0,0.3);
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+.markdown-preview-container code {
+  font-family: monospace;
+  background: rgba(0,0,0,0.2);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.markdown-preview-container pre code {
+  background: transparent;
+  padding: 0;
+}
+.markdown-preview-container p {
+  margin-bottom: 1em;
+}
+.markdown-preview-container ul, .markdown-preview-container ol {
+  margin-left: 20px;
+  margin-bottom: 1em;
+}
+.markdown-preview-container a {
+  color: var(--accent-hover);
 }
