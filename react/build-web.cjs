@@ -127,8 +127,10 @@ for (const file of files) {
 }
 
 bundleContent += `
-  // Expose the main entry point to the browser window
+  // Expose the main entry point and the virtual implementations to the browser window
   window.SplistAPI = modules['./splist'].exports;
+  window.SplistAPI.fsMock = fsMock;
+  window.SplistAPI.pathMock = pathMock;
   window.SPLIST_OUTPUT = []; // To capture results
 
 })(window);
