@@ -1,6 +1,8 @@
-DEVELOPS/
+DEVELOPS/*
+!DEVELOPS/options_docs/
 node_modules/
 .DS_Store
+.github/ISSUE_TEMPLATE/
 
 # demo_cases generated files
 demo_cases/demo_cases_raw/
