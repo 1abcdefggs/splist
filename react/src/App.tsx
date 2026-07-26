@@ -63,7 +63,8 @@ export function App() {
 
     try {
       if (window.SplistAPI && window.SplistAPI.runSplist) {
-        await window.SplistAPI.runSplist(virtualFilename, config);
+        const ctx = { fs: window.SplistAPI.fsMock, path: window.SplistAPI.pathMock };
+        await window.SplistAPI.runSplist(virtualFilename, config, {}, ctx);
         setResults([...window.SPLIST_OUTPUT]);
         setErrorMsg('');
       } else {

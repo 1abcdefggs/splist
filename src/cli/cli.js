@@ -72,8 +72,8 @@ if (!fs.existsSync(targetFile)) {
 // Parse arguments into config
 const config = parseOptions(args.slice(1), targetFile);
 
-// Delegate execution to the core pipeline
-runSplist(targetFile, config, customOptions).catch(err => {
+// Delegate execution to the core pipeline with injected fs/path
+runSplist(targetFile, config, customOptions, { fs, path }).catch(err => {
     console.error(`💥 Pipeline Error:`, err);
     process.exit(1);
 });
