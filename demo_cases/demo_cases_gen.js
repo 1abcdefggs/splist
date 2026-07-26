@@ -572,7 +572,7 @@ const categoryLabel = (file) => {
 // Execute all test cases in sorted order
 // ---------------------------------------------------------------------------
 const splistBin = path.join(__dirname, '../../src/cli/cli.js');
-let files       = fs.readdirSync(demoDir).sort();
+let files       = fs.readdirSync(demoDir).filter(f => f.endsWith('.md')).sort();
 
 // Support for running specific cases (e.g. "01", "01-10", or "01,03,05-08")
 const filterArg = process.argv[2];
@@ -613,7 +613,7 @@ files.forEach(file => {
     console.log(\`\${label} [splist \${subcmd}] \${file}\${argDisplay}\`);
 
     try {
-        const cmd = \`node "\${splistBin}" "\${targetPath}" \${subcmd}\${extraArgs ? ' ' + extraArgs : ''}\`;
+        const cmd = \`node "\${splistBin}" "\${targetPath}" \${subcmd}\${extraArgs ? ' ' + extraArgs : ''} -o "\${outDir}"\`;
         execSync(cmd, {
             env: { ...process.env, SPLIST_OUT_DIR: outDir },
             stdio: 'inherit',
