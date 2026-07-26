@@ -1,10 +1,10 @@
-import { type DragEvent, useEffect } from 'react';
-
+import { type DragEvent, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 interface EditorPanelProps {
   inputText: string;
   setInputText: (text: string) => void;
   inputFileName: string;
-  setInputFileName: (filename: string) => void;
   splitMode: string;
   setSplitMode: (mode: string) => void;
   generateToc: boolean;
@@ -23,7 +23,6 @@ export function EditorPanel({
   inputText,
   setInputText,
   inputFileName,
-  setInputFileName,
   splitMode,
   setSplitMode,
   generateToc,
@@ -38,6 +37,7 @@ export function EditorPanel({
   onFileDrop,
 }: EditorPanelProps) {
   const isEditingInput = !selectedFile || selectedFile.isInput;
+  const [viewMode, setViewMode] = useState<'code' | 'preview'>('code');
 
   const handleDragEnter = () => setIsDragging(true);
   const handleDragOver = () => setIsDragging(true);
@@ -131,6 +131,18 @@ export function EditorPanel({
         </div>
 
         <div className="input-file-actions" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div className="view-mode-toggle" style={{ display: 'flex', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
+            <button 
+              className={`quick-action-btn ${viewMode === 'code' ? 'active-view' : ''}`}
+              onClick={() => setViewMode('code')}
+              style={{ borderRadius: 0, border: 'none', background: viewMode === 'code' ? 'var(--accent)' : 'transparent', padding: '4px 8px' }}
+            >Code</button>
+            <button 
+              className={`quick-action-btn ${viewMode === 'preview' ? 'active-view' : ''}`}
+              onClick={() => setViewMode('preview')}
+              style={{ borderRadius: 0, border: 'none', background: viewMode === 'preview' ? 'var(--accent)' : 'transparent', padding: '4px 8px' }}
+            >Preview</button>
+          </div>
           <label className="toggle" title="Add index file (00_TOC.md) inside output">
             <input
               type="checkbox"
@@ -167,28 +179,38 @@ export function EditorPanel({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          style={{ position: 'relative' }}
+          style={{ position: 'relative', overflowY: viewMode === 'preview' ? 'auto' : 'hidden' }}
         >
-          {inputText && !isDragging && (
-            <div style={{ position: 'absolute', top: '10px', right: '15px', fontSize: '0.75rem', color: '#6a9955', pointerEvents: 'none', fontStyle: 'italic' }}>
-              💡 Drag & Drop your own .md file here to split it!
-            </div>
-          )}
-          <textarea
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            placeholder="Drag & Drop your Markdown file here, or paste text to split..."
-          />
+          {viewMode === 'code' ? (
+            <>
+              {inputText && !isDragging && (
+                <div style={{ position: 'absolute', top: '10px', right: '15px', fontSize: '0.75rem', color: '#6a9955', pointerEvents: 'none', fontStyle: 'italic' }}>
+                  💡 Drag & Drop your own .md file here to split it!
+                </div>
+              )}
+              <textarea
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder="Drag & Drop your Markdown file here, or paste text to split..."
+              />
 
-          {!inputText && !isDragging && (
-            <div className="empty-dropzone-watermark" onClick={() => document.querySelector('textarea')?.focus()}>
-              <svg className="watermark-icon-svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <div className="watermark-title">DRAG & DROP MARKDOWN FILE HERE</div>
-              <div className="watermark-sub">OR PASTE TEXT DIRECTLY INTO THIS EDITOR</div>
+              {!inputText && !isDragging && (
+                <div className="empty-dropzone-watermark" onClick={() => document.querySelector('textarea')?.focus()}>
+                  <svg className="watermark-icon-svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <div className="watermark-title">DRAG & DROP MARKDOWN FILE HERE</div>
+                  <div className="watermark-sub">OR PASTE TEXT DIRECTLY INTO THIS EDITOR</div>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="markdown-preview-container">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {inputText || '*No content to preview*'}
+              </ReactMarkdown>
             </div>
           )}
 
@@ -196,16 +218,24 @@ export function EditorPanel({
         </div>
       ) : (
         /* Output Preview View */
-        <div className="editor-output-preview">
+        <div className="editor-output-preview" style={{ overflowY: viewMode === 'preview' ? 'auto' : 'hidden' }}>
           <div className="preview-banner">
             <span>PREVIEWING SPLISTED GENERATED FILE: <strong>{selectedFile?.name}</strong></span>
             <button className="back-to-edit-btn" onClick={onSelectInput}>
               ✏️ Back to Edit Input Document
             </button>
           </div>
-          <pre className="output-preview-code">
-            <code>{selectedFile?.content}</code>
-          </pre>
+          {viewMode === 'code' ? (
+            <pre className="output-preview-code">
+              <code>{selectedFile?.content}</code>
+            </pre>
+          ) : (
+            <div className="markdown-preview-container" style={{ padding: '15px' }}>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {selectedFile?.content || ''}
+              </ReactMarkdown>
+            </div>
+          )}
         </div>
       )}
     </section>
