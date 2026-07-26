@@ -187,7 +187,6 @@ export function App() {
               inputText={inputText}
               setInputText={setInputText}
               inputFileName={inputFileName}
-              setInputFileName={setInputFileName}
               splitMode={splitMode}
               setSplitMode={setSplitMode}
               generateToc={generateToc}
