@@ -128,11 +128,11 @@ exports.splistEngine = async function* (splistLines, splistRule) {
 // As a general rule, this core file should strictly remain unmodified.
 // ============================================================
 'use strict';
-const fs = require('fs');
+
 
 // ──── [Phase 1-A] Ingest ────START
-/** Safely reads the target file. Terminates if not found. @param {string} targetFile @returns {string[]} */
-const readLinesSafe = (targetFile) => {
+/** Safely reads the target file. Terminates if not found. @param {string} targetFile @param {object} fs - Injected fs implementation (real or virtual). @returns {string[]} */
+const readLinesSafe = (targetFile, fs) => {
     if (!fs.existsSync(targetFile)) {
         console.error(`❌ Error: File not found -> ${targetFile}`);
         process.exit(1);
@@ -194,11 +194,10 @@ module.exports = { readLinesSafe, extractFrontMatter };
 // As a general rule, this core file should strictly remain unmodified.
 // ============================================================
 'use strict';
-const fs = require('fs'), path = require('path');
 
 // ──── [Phase 2-A] Resolve ────START
-/** Resolves safe output path based on conflictMode ('v'|'d'|'t'|'s'|'f'). UTC standard used for 'd'/'t'. @param {string} b @param {string} m @returns {string|null} */
-const resolveOutputDir = (b, m = 'v') => {
+/** Resolves safe output path based on conflictMode ('v'|'d'|'t'|'s'|'f'). UTC standard used for 'd'/'t'. @param {string} b @param {string} m @param {object} fs - Injected fs implementation. @param {object} path - Injected path implementation. @returns {string|null} */
+const resolveOutputDir = (b, m = 'v', fs, path) => {
     if (m === 'f') return b;
     if (m === 's') return fs.existsSync(b) ? (console.log(`⚠️ Skipped: already exists -> ${path.basename(b)}`), null) : b;
     if (m === 'd' || m === 't') {
@@ -213,10 +212,10 @@ const resolveOutputDir = (b, m = 'v') => {
 // ──── [Phase 2-A] Resolve ────END
 
 // ──── [Phase 2-B] Provision ────START
-/** Determines and creates the output directory. @param {string} f @param {string} p @param {string} m @param {string|null} [c] @returns {string|null} */
-const prepareOutputDir = (f, p, m, c = null) => {
+/** Determines and creates the output directory. @param {string} f @param {string} p @param {string} m @param {string|null} [c] @param {object} fs - Injected fs implementation. @param {object} path - Injected path implementation. @returns {string|null} */
+const prepareOutputDir = (f, p, m, c = null, fs, path) => {
     const dir = c || path.dirname(f);
-    const outDir = resolveOutputDir(path.join(dir, `${p}${path.basename(f, path.extname(f))}`), m);
+    const outDir = resolveOutputDir(path.join(dir, `${p}${path.basename(f, path.extname(f))}`), m, fs, path);
     if (!outDir) return null;
     if (m === 'f' && fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true, force: true });
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
@@ -307,7 +306,7 @@ module.exports = { createMarkerRule, getSafeTitle };
 // As a general rule, this core file should strictly remain unmodified.
 // ============================================================
 'use strict';
-const fs = require('fs'), path = require('path');
+const path = require('path');
 
 // ──── [Phase 4-A] Terminal Hyperlink ────START
 /** Generates an ANSI OSC 8 clickable terminal link for a file path. @param {string} text @param {string} absPath @returns {string} */
@@ -318,8 +317,8 @@ const makeClickable = (text, absPath) => {
 // ──── [Phase 4-A] Terminal Hyperlink ────END
 
 // ──── [Phase 4-B] Finish Process ────START
-/** Handles process termination, TOC generation, and completion output. @param {string} outDir @param {string|null} [tocContent] @param {boolean} [generateToc] @param {string} [ext] */
-const finishProcess = (outDir, tocContent = null, generateToc = false, ext = '.md') => {
+/** Handles process termination, TOC generation, and completion output. @param {string} outDir @param {string|null} [tocContent] @param {boolean} [generateToc] @param {string} [ext] @param {object} fs - Injected fs implementation. */
+const finishProcess = (outDir, tocContent = null, generateToc = false, ext = '.md', fs) => {
     if (generateToc && tocContent) {
         const name = `00_TOC${ext}`, filePath = path.join(outDir, name);
         fs.writeFileSync(filePath, tocContent);
@@ -575,7 +574,6 @@ module.exports = {
 // As a general rule, this core orchestrator should strictly remain unmodified.
 // ============================================================
 'use strict';
-const fs = require('fs'), path = require('path');
 const { splistEngine } = require('../engine.js');
 const phase1 = require('./phase1.js');
 const phase2 = require('./phase2.js');
@@ -587,10 +585,19 @@ const phase4 = require('./phase4.js');
  * @param {string} targetFile
  * @param {Object} [config={}]
  * @param {Object} [customOptions={}]
+ * @param {Object} [ctx={}] - Injected OS-level dependencies: { fs, path }.
+ *   - CLI passes Node's real `fs` and `path`.
+ *   - Browser / tests pass virtual implementations.
+ *   Falls back to Node built-ins when not provided (for backward compatibility).
  */
-const runSplist = async (targetFile, config = {}, customOptions = {}) => {
+const runSplist = async (targetFile, config = {}, customOptions = {}, ctx = {}) => {
+    // Resolve injected OS-level dependencies (provided by CLI or browser/test environment).
+    // Core phases themselves never call require('fs') or require('path') directly.
+    const fs = ctx.fs;
+    const path = ctx.path;
+
     // ──── [Phase 1] Input & Protection ────
-    let rawLines = phase1.readLinesSafe(targetFile);
+    let rawLines = phase1.readLinesSafe(targetFile, fs);
     if (customOptions.transformLines) rawLines = customOptions.transformLines(rawLines) || rawLines;
 
     let { frontMatter, contentLines } = phase1.extractFrontMatter(rawLines);
@@ -604,7 +611,7 @@ const runSplist = async (targetFile, config = {}, customOptions = {}) => {
 
     // ──── [Phase 2] Output Environment ────
     const prefix = config.prefix || '✂️', conflictMode = config.conflictMode || 'v';
-    let outDir = phase2.prepareOutputDir(targetFile, prefix, conflictMode, config.outDir);
+    let outDir = phase2.prepareOutputDir(targetFile, prefix, conflictMode, config.outDir, fs, path);
     if (customOptions.resolveOutDir && outDir) {
         outDir = customOptions.resolveOutDir(targetFile, outDir, config) || outDir;
     }
@@ -676,15 +683,17 @@ const runSplist = async (targetFile, config = {}, customOptions = {}) => {
 
     // ──── [Phase 4-B] Finish Process ────
     const tocContent = tocEntries.length > 0 ? `# Table of Contents\n\n${tocEntries.join('\n')}\n` : null;
-    phase4.finishProcess(outDir, tocContent, config.generateToc, ext);
+    phase4.finishProcess(outDir, tocContent, config.generateToc, ext, fs);
     if (customOptions.afterFinish) customOptions.afterFinish(outDir, config);
 };
 
 module.exports = { runSplist };
   })(modules['./splist'], modules['./splist'].exports, function(id) { return require(id, '.'); });
   
-  // Expose the main entry point to the browser window
+  // Expose the main entry point and the virtual implementations to the browser window
   window.SplistAPI = modules['./splist'].exports;
+  window.SplistAPI.fsMock = fsMock;
+  window.SplistAPI.pathMock = pathMock;
   window.SPLIST_OUTPUT = []; // To capture results
 
 })(window);

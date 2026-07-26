@@ -8,11 +8,10 @@
 // As a general rule, this core file should strictly remain unmodified.
 // ============================================================
 'use strict';
-const fs = require('fs'), path = require('path');
 
 // ──── [Phase 2-A] Resolve ────START
-/** Resolves safe output path based on conflictMode ('v'|'d'|'t'|'s'|'f'). UTC standard used for 'd'/'t'. @param {string} b @param {string} m @returns {string|null} */
-const resolveOutputDir = (b, m = 'v') => {
+/** Resolves safe output path based on conflictMode ('v'|'d'|'t'|'s'|'f'). UTC standard used for 'd'/'t'. @param {string} b @param {string} m @param {object} fs - Injected fs implementation. @param {object} path - Injected path implementation. @returns {string|null} */
+const resolveOutputDir = (b, m = 'v', fs, path) => {
     if (m === 'f') return b;
     if (m === 's') return fs.existsSync(b) ? (console.log(`⚠️ Skipped: already exists -> ${path.basename(b)}`), null) : b;
     if (m === 'd' || m === 't') {
@@ -27,10 +26,10 @@ const resolveOutputDir = (b, m = 'v') => {
 // ──── [Phase 2-A] Resolve ────END
 
 // ──── [Phase 2-B] Provision ────START
-/** Determines and creates the output directory. @param {string} f @param {string} p @param {string} m @param {string|null} [c] @returns {string|null} */
-const prepareOutputDir = (f, p, m, c = null) => {
+/** Determines and creates the output directory. @param {string} f @param {string} p @param {string} m @param {string|null} [c] @param {object} fs - Injected fs implementation. @param {object} path - Injected path implementation. @returns {string|null} */
+const prepareOutputDir = (f, p, m, c = null, fs, path) => {
     const dir = c || path.dirname(f);
-    const outDir = resolveOutputDir(path.join(dir, `${p}${path.basename(f, path.extname(f))}`), m);
+    const outDir = resolveOutputDir(path.join(dir, `${p}${path.basename(f, path.extname(f))}`), m, fs, path);
     if (!outDir) return null;
     if (m === 'f' && fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true, force: true });
     if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });

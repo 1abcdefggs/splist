@@ -8,11 +8,11 @@
 // As a general rule, this core file should strictly remain unmodified.
 // ============================================================
 'use strict';
-const fs = require('fs');
+
 
 // ──── [Phase 1-A] Ingest ────START
-/** Safely reads the target file. Terminates if not found. @param {string} targetFile @returns {string[]} */
-const readLinesSafe = (targetFile) => {
+/** Safely reads the target file. Terminates if not found. @param {string} targetFile @param {object} fs - Injected fs implementation (real or virtual). @returns {string[]} */
+const readLinesSafe = (targetFile, fs) => {
     if (!fs.existsSync(targetFile)) {
         console.error(`❌ Error: File not found -> ${targetFile}`);
         process.exit(1);

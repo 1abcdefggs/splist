@@ -8,7 +8,6 @@
 // As a general rule, this core orchestrator should strictly remain unmodified.
 // ============================================================
 'use strict';
-const fs = require('fs'), path = require('path');
 const { splistEngine } = require('../engine.js');
 const phase1 = require('./phase1.js');
 const phase2 = require('./phase2.js');
@@ -20,10 +19,19 @@ const phase4 = require('./phase4.js');
  * @param {string} targetFile
  * @param {Object} [config={}]
  * @param {Object} [customOptions={}]
+ * @param {Object} [ctx={}] - Injected OS-level dependencies: { fs, path }.
+ *   - CLI passes Node's real `fs` and `path`.
+ *   - Browser / tests pass virtual implementations.
+ *   Falls back to Node built-ins when not provided (for backward compatibility).
  */
-const runSplist = async (targetFile, config = {}, customOptions = {}) => {
+const runSplist = async (targetFile, config = {}, customOptions = {}, ctx = {}) => {
+    // Resolve injected OS-level dependencies (provided by CLI or browser/test environment).
+    // Core phases themselves never call require('fs') or require('path') directly.
+    const fs = ctx.fs;
+    const path = ctx.path;
+
     // ──── [Phase 1] Input & Protection ────
-    let rawLines = phase1.readLinesSafe(targetFile);
+    let rawLines = phase1.readLinesSafe(targetFile, fs);
     if (customOptions.transformLines) rawLines = customOptions.transformLines(rawLines) || rawLines;
 
     let { frontMatter, contentLines } = phase1.extractFrontMatter(rawLines);
@@ -37,7 +45,7 @@ const runSplist = async (targetFile, config = {}, customOptions = {}) => {
 
     // ──── [Phase 2] Output Environment ────
     const prefix = config.prefix || '✂️', conflictMode = config.conflictMode || 'v';
-    let outDir = phase2.prepareOutputDir(targetFile, prefix, conflictMode, config.outDir);
+    let outDir = phase2.prepareOutputDir(targetFile, prefix, conflictMode, config.outDir, fs, path);
     if (customOptions.resolveOutDir && outDir) {
         outDir = customOptions.resolveOutDir(targetFile, outDir, config) || outDir;
     }
@@ -109,7 +117,7 @@ const runSplist = async (targetFile, config = {}, customOptions = {}) => {
 
     // ──── [Phase 4-B] Finish Process ────
     const tocContent = tocEntries.length > 0 ? `# Table of Contents\n\n${tocEntries.join('\n')}\n` : null;
-    phase4.finishProcess(outDir, tocContent, config.generateToc, ext);
+    phase4.finishProcess(outDir, tocContent, config.generateToc, ext, fs);
     if (customOptions.afterFinish) customOptions.afterFinish(outDir, config);
 };
 
