@@ -1,6 +1,22 @@
-import { type DragEvent, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { type DragEvent, useEffect, useState, lazy, Suspense } from 'react';
+
+// Dynamically import heavy markdown libraries to code-split and reduce the main chunk size
+const MarkdownPreview = lazy(async () => {
+  const [ReactMarkdownModule, remarkGfmModule] = await Promise.all([
+    import('react-markdown'),
+    import('remark-gfm')
+  ]);
+  const ReactMarkdown = ReactMarkdownModule.default;
+  const remarkGfm = remarkGfmModule.default;
+  
+  return {
+    default: ({ children }: { children: string }) => (
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {children}
+      </ReactMarkdown>
+    )
+  };
+});
 interface EditorPanelProps {
   inputText: string;
   setInputText: (text: string) => void;
@@ -37,7 +53,7 @@ export function EditorPanel({
   onFileDrop,
 }: EditorPanelProps) {
   const isEditingInput = !selectedFile || selectedFile.isInput;
-  const [viewMode, setViewMode] = useState<'code' | 'preview'>('code');
+  const [viewMode, setViewMode] = useState<'code' | 'preview'>('preview');
 
   const handleDragEnter = () => setIsDragging(true);
   const handleDragOver = () => setIsDragging(true);
@@ -110,10 +126,13 @@ export function EditorPanel({
               name="splitMode"
               value="sp"
               checked={splitMode === 'sp'}
-              onChange={(e) => setSplitMode(e.target.value)}
+              onChange={(e) => {
+                setSplitMode(e.target.value);
+                if (e.target.value === 'sp') setViewMode('code');
+              }}
             />
             <span className={`radio-btn ${splitMode === 'sp' ? 'is-active' : ''}`}>
-              SP (✂️ MARKERS)
+              {splitMode === 'sp' ? '✓ SP (MARKERS)' : 'SP (MARKERS)'}
             </span>
           </label>
           <label className="radio-label" title="Split by Markdown H1/H2 Headings">
@@ -125,7 +144,7 @@ export function EditorPanel({
               onChange={(e) => setSplitMode(e.target.value)}
             />
             <span className={`radio-btn ${splitMode === 'list' ? 'is-active' : ''}`}>
-              LIST (# HEADINGS)
+              {splitMode === 'list' ? '✓ LIST (# HEADINGS)' : 'LIST (# HEADINGS)'}
             </span>
           </label>
         </div>
@@ -136,12 +155,12 @@ export function EditorPanel({
               className={`quick-action-btn ${viewMode === 'code' ? 'active-view' : ''}`}
               onClick={() => setViewMode('code')}
               style={{ borderRadius: 0, border: 'none', background: viewMode === 'code' ? 'var(--accent)' : 'transparent', padding: '4px 8px' }}
-            >Code</button>
+            >{viewMode === 'code' ? '✓ Code' : 'Code'}</button>
             <button 
               className={`quick-action-btn ${viewMode === 'preview' ? 'active-view' : ''}`}
               onClick={() => setViewMode('preview')}
               style={{ borderRadius: 0, border: 'none', background: viewMode === 'preview' ? 'var(--accent)' : 'transparent', padding: '4px 8px' }}
-            >Preview</button>
+            >{viewMode === 'preview' ? '✓ Preview' : 'Preview'}</button>
           </div>
           <label className="toggle" title="Add index file (00_TOC.md) inside output">
             <input
@@ -150,7 +169,7 @@ export function EditorPanel({
               onChange={(e) => setGenerateToc(e.target.checked)}
             />
             <span className="slider"></span>
-            <span className="label-text" style={{ fontSize: '0.75rem', fontWeight: 'bold' }}>+ 00_TOC.MD</span>
+            <span className="label-text" style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>+ 00_TOC.MD</span>
           </label>
           <button
             className="quick-action-btn sample-btn"
@@ -208,9 +227,11 @@ export function EditorPanel({
             </>
           ) : (
             <div className="markdown-preview-container">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {inputText || '*No content to preview*'}
-              </ReactMarkdown>
+              <Suspense fallback={<div style={{padding: '20px', color: '#858585'}}>Loading Preview Engine...</div>}>
+                <MarkdownPreview>
+                  {inputText || '*No content to preview*'}
+                </MarkdownPreview>
+              </Suspense>
             </div>
           )}
 
@@ -231,9 +252,11 @@ export function EditorPanel({
             </pre>
           ) : (
             <div className="markdown-preview-container" style={{ padding: '15px' }}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {selectedFile?.content || ''}
-              </ReactMarkdown>
+              <Suspense fallback={<div style={{padding: '20px', color: '#858585'}}>Loading Preview Engine...</div>}>
+                <MarkdownPreview>
+                  {selectedFile?.content || ''}
+                </MarkdownPreview>
+              </Suspense>
             </div>
           )}
         </div>

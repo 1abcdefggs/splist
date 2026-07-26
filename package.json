@@ -21,8 +21,7 @@
     "url": "https://github.com/splists/splist/issues"
   },
   "files": [
-    "src",
-    "USAGE.md"
+    "src"
   ],
   "keywords": [
     "split",
