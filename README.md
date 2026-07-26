@@ -1,19 +1,23 @@
-# SPLIST (split & list)
-[![npm version](https://img.shields.io/npm/v/@splists/splist.svg?color=blue)](https://www.npmjs.com/package/@splists/splist)
-[![npm downloads](https://img.shields.io/npm/dm/@splists/splist.svg?color=success)](https://www.npmjs.com/package/@splists/splist)
-![Node.js](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen)
-![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
-[![Browser](https://img.shields.io/badge/Browser-Try%20Now!-ff69b4.svg)](https://splists.github.io/)
-[![GitHub Repository](https://img.shields.io/badge/GitHub-splists%2Fsplist-black?logo=github)](https://github.com/splists/splist)
-[![Publish status](https://github.com/splists/splist/actions/workflows/publish.yml/badge.svg)](https://github.com/splists/splist/actions)
+# SPLIST (split & list) 
+[![Org](https://img.shields.io/badge/Org-splists-93C5FD?style=flat-square&logo=github&logoColor=black&labelColor=white)](https://github.com/splists)
+[![Repo](https://img.shields.io/badge/Repo-splists%2Fsplist-D1D5DB?style=flat-square&labelColor=white)](https://github.com/splists/splist)
+[![Ver](https://img.shields.io/github/v/release/splists/splist.svg?label=Ver&color=D1D5DB&style=flat-square&labelColor=white)](https://github.com/splists/splist/releases)
+![License: MIT](https://img.shields.io/badge/License-MIT-FDE047?style=flat-square&labelColor=white)
+[![GitHub Created At](https://img.shields.io/github/created-at/splists/splist.svg?color=D1D5DB&style=flat-square&labelColor=white)](https://github.com/splists/splist)[![GitHub Release Date](https://img.shields.io/github/release-date/splists/splist.svg?color=D1D5DB&style=flat-square&labelColor=white)](https://github.com/splists/splist/releases)
 
-✨ **Try SPLIST instantly in your browser:** [https://splists.github.io/](https://splists.github.io/)
+SPLIST splits long documents into separate files and reconstructs them.🌐 Split output results https://splists.github.io
 
-`npm install -g @splists/splist` ([npm registry](https://www.npmjs.com/package/@splists/splist))
+[![npm version](https://img.shields.io/npm/v/@splists/splist.svg?color=93C5FD&style=flat-square&logo=npm&logoColor=black&labelColor=white)](https://www.npmjs.com/package/@splists/splist)
+[![npm downloads](https://img.shields.io/npm/dt/@splists/splist.svg?color=86EFAC&style=flat-square&logo=npm&logoColor=black&labelColor=white)](https://www.npmjs.com/package/@splists/splist)
+[![Node.js](https://img.shields.io/node/v/@splists/splist.svg?color=86EFAC&style=flat-square&logo=nodedotjs&logoColor=black&labelColor=white)](https://www.npmjs.com/package/@splists/splist)
+![Zero Dependencies](https://img.shields.io/badge/dependencies-0-86EFAC?style=flat-square&labelColor=white)
+[![Included Files](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Funpkg.com%2F%40splists%2Fsplist%2Fpackage.json&query=%24.files.length&label=Included%20Files&color=93C5FD&style=flat-square&logo=npm&logoColor=black&labelColor=white)](https://unpkg.com/@splists/splist/package.json)
+[![Bundle Size](https://img.shields.io/bundlephobia/minzip/@splists/splist.svg?color=93C5FD&style=flat-square&labelColor=white)](https://bundlephobia.com/package/@splists/splist)
+[![NPM Unpacked Size](https://img.shields.io/npm/unpacked-size/@splists/splist.svg?color=93C5FD&style=flat-square&logo=npm&logoColor=black&labelColor=white)](https://www.npmjs.com/package/@splists/splist)
 
-> 🌐 **Try it now in your browser!**
-> SPLIST is available as a full local Web UI at **[splists.github.io](https://splists.github.io/)**! No installation required—just drag and drop your markdown files to process them securely in your browser.
+```bash
+npm i @splists/splist 
+```
 
 ## Overview
 Splitting large Markdown or text files into a table of contents.
@@ -52,12 +56,9 @@ Before: A single massive file (Raw). Divided into ## units using a typical Markd
 ```
 
 ### 🤖 LLM Prompt (Copy & Paste)
-Want an AI assistant to help you split a file or organize your workspace using SPLIST? Just copy and paste the prompt below to your LLM:
-
-<img src="assets/splist-demo-ai.png" alt="AI Agent Demo" width="70%">
-
+You can also copy the prompt below and paste it into your LLM to use with an AI assistant.
 <details>
-<summary>Click to copy the LLM Prompt</summary>
+<summary>Please click here to open it.</summary>
 
 ```text
 I want to split a long document into smaller, organized files. 
@@ -72,6 +73,9 @@ Please read the target file, decide the best splitting strategy (list or sp), an
 </details>
 
 ---
+Chat example is here.
+
+<img src="assets/splist-demo-ai.png" alt="AI Agent Demo" width="30%">
 
 ## 🛠️ Installation & Execution Guide
 
@@ -319,3 +323,15 @@ Can be appended and used with either `list` or `sp` commands. If unspecified, se
 ---
 
 > For even more detailed specifications and troubleshooting, please read the **[Official Manual (USAGE.md)](USAGE.md)**.
+
+## 🧠 Architecture & Future Roadmap (For Contributors)
+
+`splist` is designed with a highly modular 4-phase pipeline (Input → Vesseling → Rules → Output). If you're interested in the internal architecture or want to contribute to future extensions, please explore our design documents:
+
+- [Design Rationale (DESIGN_RATIONALE.md)](DESIGN_RATIONALE.md) - The philosophy behind all design decisions.
+- [Constitution (CONSTITUTION.md)](CONSTITUTION.md) - The unbreakable rules of `splist` development.
+- **Phase Pipeline & Future Extensions**:
+  - [Phase 1: Input & Cleansing](DEVELOPS/options_docs/phase1.md)
+  - [Phase 2: Vesseling](DEVELOPS/options_docs/phase2.md)
+  - [Phase 3: Rules & Naming](DEVELOPS/options_docs/phase3.md)
+  - [Phase 4: Output & Finishing](DEVELOPS/options_docs/phase4.md)
