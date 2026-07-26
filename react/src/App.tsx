@@ -122,6 +122,10 @@ export function App() {
     const fn = filename || inputFileName || 'input.md';
     const ct = content !== undefined ? content : inputText;
     
+    if (fn !== inputFileName) {
+      setResults([]);
+    }
+    
     setInputFileName(fn);
     setInputText(ct);
     setSelectedFile({ name: fn, content: ct, isInput: true });
@@ -138,6 +142,7 @@ export function App() {
       setInputFileName(filename);
       setInputText(demoContent);
       setSelectedFile({ name: filename, content: demoContent, isInput: true });
+      setResults([]); // Clear previous results to emphasize they need to hit RUN
     }
   };
 
@@ -155,6 +160,7 @@ export function App() {
     setInputFileName(filename);
     setInputText(content);
     setSelectedFile({ name: filename, content, isInput: true });
+    setResults([]); // Clear previous results to emphasize they need to hit RUN
   };
 
   return (
@@ -208,6 +214,7 @@ export function App() {
             generateToc={generateToc}
             resultsCount={results.length}
             errorMsg={errorMsg}
+            hasInput={!!inputText}
             onSplit={handleSplit}
           />
         </main>

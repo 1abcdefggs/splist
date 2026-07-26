@@ -1,6 +1,21 @@
-import { useState, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { useState, useEffect, lazy, Suspense } from 'react';
+
+const MarkdownPreview = lazy(async () => {
+  const [ReactMarkdownModule, remarkGfmModule] = await Promise.all([
+    import('react-markdown'),
+    import('remark-gfm')
+  ]);
+  const ReactMarkdown = ReactMarkdownModule.default;
+  const remarkGfm = remarkGfmModule.default;
+  
+  return {
+    default: ({ children }: { children: string }) => (
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {children}
+      </ReactMarkdown>
+    )
+  };
+});
 
 import readmeText from '../../../README.md?raw';
 import usageText from '../../../USAGE.md?raw';
@@ -44,9 +59,11 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
     return (
       <div className="markdown-body" style={{ padding: '20px', lineHeight: '1.6', color: '#e0e0e0' }}>
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-          {content}
-        </ReactMarkdown>
+        <Suspense fallback={<div style={{color: '#858585'}}>Loading...</div>}>
+          <MarkdownPreview>
+            {content}
+          </MarkdownPreview>
+        </Suspense>
       </div>
     );
   };

@@ -19,6 +19,8 @@ SPLIST splits long documents into separate files and reconstructs them.🌐 Spli
 npm i @splists/splist 
 ```
 
+> 📖 **[Official Manual (USAGE.md)](https://github.com/splists/splist/blob/main/USAGE.md)** - *Detailed specifications and commands*
+
 ## Overview
 Splitting large Markdown or text files into a table of contents.
 
@@ -122,6 +124,7 @@ npm install -g @splists/splist
 ```
 - Installs to a common area across your entire PC.
 - The short `splist` command can be used from anywhere, whether you open a VS Code terminal, Windows Command Prompt (cmd) on your Desktop, or Mac Terminal.
+- *Note: This package is dual-published and also available via GitHub Packages (`npm.pkg.github.com`) if preferred.*
 
 ### Integrate into your own project
 (For team development and automation)
@@ -175,6 +178,7 @@ Prefer a graphical interface over the command line? SPLIST offers a zero-depende
 ### Features in the Web App:
 * **Drag & Drop**: Simply drop your `.md` or `.txt` file into the browser window.
 * **Interactive Preview**: Instantly preview how the document will be split into folders and files before downloading.
+* **Markdown Rendering**: Toggle between raw code and a rendered Markdown preview (VS Code style).
 * **Zero Server Uploads**: Processing happens 100% locally in your browser using Virtual File System mocks—your private documents never leave your machine!
 * **ZIP Download**: Download all split folders and files cleanly in a single `.zip` file.
 
@@ -322,7 +326,7 @@ Can be appended and used with either `list` or `sp` commands. If unspecified, se
 
 ---
 
-> For even more detailed specifications and troubleshooting, please read the **[Official Manual (USAGE.md)](USAGE.md)**.
+> For even more detailed specifications and troubleshooting, please read the **[Official Manual (USAGE.md)](https://github.com/splists/splist/blob/main/USAGE.md)**.
 
 ## 🧠 Architecture & Future Roadmap (For Contributors)
 
