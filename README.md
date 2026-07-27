@@ -21,7 +21,7 @@ npm i @splists/splist
 
 > 📖 **[Official Manual (USAGE.md)](https://github.com/splists/splist/blob/main/USAGE.md)** - *Detailed specifications and commands*
 
-> 🛡️ **Security & File Access:** This tool operates **strictly on the files you specify as command arguments**. It reads the specified target file, processes the text in memory, and writes the output to a newly generated subdirectory in your current workspace. It does not access, read, or upload any other system files.
+> 🛡️ **Security & File Access:** This tool processes ONLY the specified target file. It does not access any other files.
 
 ## Overview
 Splitting large Markdown or text files into a table of contents.
@@ -329,6 +329,13 @@ Can be appended and used with either `list` or `sp` commands. If unspecified, se
 ---
 
 > For even more detailed specifications and troubleshooting, please read the **[Official Manual (USAGE.md)](https://github.com/splists/splist/blob/main/USAGE.md)**.
+
+## 🛡️ Security Policy & File System Access
+
+Because this is a CLI tool designed to read and split local files, it inherently utilizes Node.js's file system (`fs`) modules. However, we want to assure you of its safety:
+- **Strict Scope**: It operates *strictly* on the files you specify as command arguments. 
+- **No Side Effects**: It reads the specified target file, processes the text in memory, and writes the output to a newly generated subdirectory in your current workspace. 
+- **No External Access**: It absolutely does not access, read, or upload any other system files (such as SSH keys, `.env` files, or configurations) on your machine.
 
 ## 🧠 Architecture & Future Roadmap (For Contributors)
 
