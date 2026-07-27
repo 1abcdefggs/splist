@@ -3,7 +3,7 @@
 [![Repo](https://img.shields.io/badge/Repo-splists%2Fsplist-D1D5DB?style=flat-square&labelColor=white)](https://github.com/splists/splist)
 [![Ver](https://img.shields.io/github/v/release/splists/splist.svg?label=Ver&color=D1D5DB&style=flat-square&labelColor=white)](https://github.com/splists/splist/releases)
 ![License: MIT](https://img.shields.io/badge/License-MIT-FDE047?style=flat-square&labelColor=white)
-[![GitHub Created At](https://img.shields.io/github/created-at/splists/splist.svg?color=D1D5DB&style=flat-square&labelColor=white)](https://github.com/splists/splist)[![GitHub Release Date](https://img.shields.io/github/release-date/splists/splist.svg?color=D1D5DB&style=flat-square&labelColor=white)](https://github.com/splists/splist/releases)
+[![GitHub Created At](https://img.shields.io/github/created-at/splists/splist.svg?color=D1D5DB&style=flat-square&labelColor=white)](https://github.com/splists/splist)[![GitHub Release Date](https://img.shields.io/github/release-date/splists/splist.svg?color=D1D5DB&style=flat-square&labelColor=white)](https://github.com/splists/splist/releases)[![GitHub issues](https://img.shields.io/github/issues/splists/splist.svg?color=FCA5A5&style=flat-square&labelColor=white)](https://github.com/splists/splist/issues)
 
 SPLIST splits long documents into separate files and reconstructs them.🌐 Split output results https://splists.github.io
 
