@@ -21,6 +21,8 @@ npm i @splists/splist
 
 > 📖 **[Official Manual (USAGE.md)](https://github.com/splists/splist/blob/main/USAGE.md)** - *Detailed specifications and commands*
 
+> 🛡️ **Security & File Access:** This tool operates **strictly on the files you specify as command arguments**. It reads the specified target file, processes the text in memory, and writes the output to a newly generated subdirectory in your current workspace. It does not access, read, or upload any other system files.
+
 ## Overview
 Splitting large Markdown or text files into a table of contents.
 
