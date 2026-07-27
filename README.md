@@ -337,6 +337,8 @@ Because this is a CLI tool designed to read and split local files, it inherently
 - **No Side Effects**: It reads the specified target file, processes the text in memory, and writes the output to a newly generated subdirectory in your current workspace. 
 - **No External Access**: It absolutely does not access, read, or upload any other system files (such as SSH keys, `.env` files, or configurations) on your machine.
 
+*For more details on our ongoing security architecture improvements, see [Issue #22](https://github.com/splists/splist/issues/22).*
+
 ## 🧠 Architecture & Future Roadmap (For Contributors)
 
 `splist` is designed with a highly modular 4-phase pipeline (Input → Vesseling → Rules → Output). If you're interested in the internal architecture or want to contribute to future extensions, please explore our design documents:
